@@ -1,4 +1,5 @@
 use sscanf::sscanf;
+use rayon::prelude::*;
 
 advent_of_code::solution!(2);
 
@@ -32,12 +33,12 @@ pub fn part_two(input: &str) -> Option<u64> {
 
 fn sum_invalid<P>(input: &str, p: P) -> Option<u64>
 where
-    P: FnMut(&u64) -> bool,
+    P: Send + Sync + Fn(&u64) -> bool,
 {
     Some(
         input
             .trim()
-            .split(',')
+            .par_split(',')
             .filter_map(|range| {
                 let (lo, hi) = sscanf!(range, "{}-{}", u64, u64).ok()?;
                 Some((lo, hi))
