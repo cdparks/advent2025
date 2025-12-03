@@ -51,6 +51,7 @@ mod tests {
             part_one(&advent_of_code::template::read_file("examples", DAY)),
             Some(3)
         );
+        #[cfg(not(feature = "ci"))]
         assert_eq!(
             part_one(&advent_of_code::template::read_file("inputs", DAY)),
             Some(1195)
@@ -63,6 +64,7 @@ mod tests {
             part_two(&advent_of_code::template::read_file("examples", DAY)),
             Some(6)
         );
+        #[cfg(not(feature = "ci"))]
         assert_eq!(
             part_two(&advent_of_code::template::read_file("inputs", DAY)),
             Some(6770)

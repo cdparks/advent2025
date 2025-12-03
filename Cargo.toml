@@ -18,6 +18,7 @@ debug = 1
 dhat-heap = ["dhat"]
 today = ["chrono"]
 test_lib = []
+ci = []
 
 [dependencies]
 sscanf = "0.4.4"
