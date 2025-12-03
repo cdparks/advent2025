@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 advent_of_code::solution!(3);
 
 pub fn part_one(input: &str) -> Option<u64> {
@@ -11,42 +9,27 @@ pub fn part_two(input: &str) -> Option<u64> {
 }
 
 fn solve(input: &str, width: usize) -> u64 {
+    fn go(digits: &[u64], acc: u64, n: usize) -> Option<u64> {
+        if n == 0 {
+            Some(acc)
+        } else {
+            digits[..=digits.len() - n]
+                .iter()
+                .enumerate()
+                // make max_by_key return the first max in case of ties
+                .rev()
+                .max_by_key(|(_, d)| *d)
+                .and_then(|(i, d)| go(&digits[i + 1..], 10 * acc + d, n - 1))
+        }
+    }
+
     input
         .lines()
         .flat_map(|line| {
             let digits: Vec<u64> = line.chars().map(|c| c as u64 - '0' as u64).collect();
-            solve_memo(&mut HashMap::new(), &digits, 0, width)
+            go(&digits, 0, width)
         })
         .sum()
-}
-
-fn solve_memo(
-    memo: &mut HashMap<(usize, usize), Option<u64>>,
-    digits: &[u64],
-    i: usize,
-    remaining: usize,
-) -> Option<u64> {
-    (i..digits.len())
-        .into_iter()
-        .flat_map(|j| {
-            let key = (j, remaining);
-            match memo.get(&key) {
-                None => {
-                    let value = if remaining <= 1 {
-                        Some(digits[j])
-                    } else if remaining <= digits.len() - j {
-                        let d = digits[j] * 10u64.pow(remaining as u32 - 1);
-                        solve_memo(memo, digits, j + 1, remaining - 1).map(|m| d + m)
-                    } else {
-                        None
-                    };
-                    memo.insert(key, value);
-                    value
-                }
-                Some(m) => *m,
-            }
-        })
-        .max()
 }
 
 #[cfg(test)]
