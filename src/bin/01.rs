@@ -22,7 +22,7 @@ pub fn part_two(input: &str) -> Option<i32> {
             .iter()
             .flat_map(|n| {
                 let d = if *n < 0 { -1i32 } else { 1i32 };
-                repeat_n(d, n.abs() as usize)
+                repeat_n(d, n.unsigned_abs() as usize)
             })
             .fold((0, 50), |(zeroes, pos), d| {
                 let pos = (pos + d).rem_euclid(100);

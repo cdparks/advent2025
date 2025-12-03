@@ -5,7 +5,7 @@ advent_of_code::solution!(2);
 pub fn part_one(input: &str) -> Option<u64> {
     sum_invalid(input, |x| {
         let s = x.to_string();
-        if s.len() % 2 != 0 {
+        if !s.len().is_multiple_of(2) {
             return false;
         }
         let (rhs, lhs) = s.split_at(s.len() / 2);
@@ -17,7 +17,7 @@ pub fn part_two(input: &str) -> Option<u64> {
     sum_invalid(input, |x| {
         let chars: Vec<char> = x.to_string().chars().collect();
         for i in 1..=chars.len() / 2 {
-            if chars.len() % i != 0 {
+            if !chars.len().is_multiple_of(i) {
                 continue;
             }
             let mut iter = chars.chunks_exact(i);
