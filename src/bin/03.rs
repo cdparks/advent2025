@@ -35,30 +35,19 @@ fn solve(input: &str, width: usize) -> u64 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use advent_of_code::template::read_file;
 
     #[test]
     fn test_part_one() {
-        assert_eq!(
-            part_one(&advent_of_code::template::read_file("examples", DAY)),
-            Some(357)
-        );
+        assert_eq!(part_one(&read_file("examples", DAY)), Some(357));
         #[cfg(not(feature = "ci"))]
-        assert_eq!(
-            part_one(&advent_of_code::template::read_file("inputs", DAY)),
-            Some(17554)
-        );
+        assert_eq!(part_one(&read_file("inputs", DAY)), Some(17554));
     }
 
     #[test]
     fn test_part_two() {
-        assert_eq!(
-            part_two(&advent_of_code::template::read_file("examples", DAY)),
-            Some(3121910778619)
-        );
+        assert_eq!(part_two(&read_file("examples", DAY)), Some(3121910778619));
         #[cfg(not(feature = "ci"))]
-        assert_eq!(
-            part_two(&advent_of_code::template::read_file("inputs", DAY)),
-            Some(175053592950232)
-        );
+        assert_eq!(part_two(&read_file("inputs", DAY)), Some(175053592950232));
     }
 }

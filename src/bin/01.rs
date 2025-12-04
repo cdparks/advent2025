@@ -44,30 +44,19 @@ fn parse_rotations(s: &str) -> Vec<i32> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use advent_of_code::template::read_file;
 
     #[test]
     fn test_part_one() {
-        assert_eq!(
-            part_one(&advent_of_code::template::read_file("examples", DAY)),
-            Some(3)
-        );
+        assert_eq!(part_one(&read_file("examples", DAY)), Some(3));
         #[cfg(not(feature = "ci"))]
-        assert_eq!(
-            part_one(&advent_of_code::template::read_file("inputs", DAY)),
-            Some(1195)
-        );
+        assert_eq!(part_one(&read_file("inputs", DAY)), Some(1195));
     }
 
     #[test]
     fn test_part_two() {
-        assert_eq!(
-            part_two(&advent_of_code::template::read_file("examples", DAY)),
-            Some(6)
-        );
+        assert_eq!(part_two(&read_file("examples", DAY)), Some(6));
         #[cfg(not(feature = "ci"))]
-        assert_eq!(
-            part_two(&advent_of_code::template::read_file("inputs", DAY)),
-            Some(6770)
-        );
+        assert_eq!(part_two(&read_file("inputs", DAY)), Some(6770));
     }
 }

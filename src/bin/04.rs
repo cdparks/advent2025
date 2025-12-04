@@ -81,30 +81,19 @@ fn parse_rolls(input: &str) -> HashSet<Point> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use advent_of_code::template::read_file;
 
     #[test]
     fn test_part_one() {
-        assert_eq!(
-            part_one(&advent_of_code::template::read_file("examples", DAY)),
-            Some(13)
-        );
+        assert_eq!(part_one(&read_file("examples", DAY)), Some(13));
         #[cfg(not(feature = "ci"))]
-        assert_eq!(
-            part_one(&advent_of_code::template::read_file("inputs", DAY)),
-            Some(1349)
-        );
+        assert_eq!(part_one(&read_file("inputs", DAY)), Some(1349));
     }
 
     #[test]
     fn test_part_two() {
-        assert_eq!(
-            part_two(&advent_of_code::template::read_file("examples", DAY)),
-            Some(43)
-        );
+        assert_eq!(part_two(&read_file("examples", DAY)), Some(43));
         #[cfg(not(feature = "ci"))]
-        assert_eq!(
-            part_two(&advent_of_code::template::read_file("inputs", DAY)),
-            Some(8277)
-        );
+        assert_eq!(part_two(&read_file("inputs", DAY)), Some(8277));
     }
 }

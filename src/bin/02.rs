@@ -1,5 +1,5 @@
-use sscanf::sscanf;
 use rayon::prelude::*;
+use sscanf::sscanf;
 
 advent_of_code::solution!(2);
 
@@ -52,30 +52,19 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    use advent_of_code::template::read_file;
 
     #[test]
     fn test_part_one() {
-        assert_eq!(
-            part_one(&advent_of_code::template::read_file("examples", DAY)),
-            Some(1227775554)
-        );
+        assert_eq!(part_one(&read_file("examples", DAY)), Some(1227775554));
         #[cfg(not(feature = "ci"))]
-        assert_eq!(
-            part_one(&advent_of_code::template::read_file("inputs", DAY)),
-            Some(18700015741)
-        );
+        assert_eq!(part_one(&read_file("inputs", DAY)), Some(18700015741));
     }
 
     #[test]
     fn test_part_two() {
-        assert_eq!(
-            part_two(&advent_of_code::template::read_file("examples", DAY)),
-            Some(4174379265)
-        );
+        assert_eq!(part_two(&read_file("examples", DAY)), Some(4174379265));
         #[cfg(not(feature = "ci"))]
-        assert_eq!(
-            part_two(&advent_of_code::template::read_file("inputs", DAY)),
-            Some(20077272987)
-        );
+        assert_eq!(part_two(&read_file("inputs", DAY)), Some(20077272987));
     }
 }
