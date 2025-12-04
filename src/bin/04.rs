@@ -1,3 +1,4 @@
+use advent_of_code::point::Point2;
 use std::collections::{HashSet, VecDeque};
 
 advent_of_code::solution!(4);
@@ -10,7 +11,7 @@ pub fn part_two(input: &str) -> Option<u64> {
     Some(remove_accessible_rolls(&mut parse_rolls(input)))
 }
 
-type Point = (isize, isize);
+type Point = Point2<isize>;
 
 fn remove_accessible_rolls(rolls: &mut HashSet<Point>) -> u64 {
     let mut count = 0;
@@ -39,28 +40,9 @@ fn is_accessible(rolls: &HashSet<Point>, p: Point) -> bool {
     neighbors(&rolls, p).count() < 4
 }
 
-fn neighbors(rolls: &HashSet<Point>, (x, y): Point) -> impl Iterator<Item = Point> {
-    DIRS_8.iter().filter_map(move |(dx, dy)| {
-        let neighbor = (x + dx, y + dy);
-        if rolls.contains(&neighbor) {
-            Some(neighbor)
-        } else {
-            None
-        }
-    })
+fn neighbors(rolls: &HashSet<Point>, p: Point) -> impl Iterator<Item = Point> {
+    p.neighbors8().into_iter().filter(|q| rolls.contains(&q))
 }
-
-#[rustfmt::skip]
-static DIRS_8: [Point; 8] = [
-    (-1, -1), // (←, ↑)
-    (-1,  0), // (←, _)
-    (-1,  1), // (←, ↓)
-    ( 0, -1), // (_, ↑)
-    ( 0,  1), // (_, ↓)
-    ( 1, -1), // (→, ↑)
-    ( 1,  0), // (→, _)
-    ( 1,  1), // (→, ↓)
-];
 
 fn parse_rolls(input: &str) -> HashSet<Point> {
     input
@@ -69,7 +51,7 @@ fn parse_rolls(input: &str) -> HashSet<Point> {
         .flat_map(|(y, line)| {
             line.chars().enumerate().filter_map(move |(x, c)| {
                 if c == '@' {
-                    Some((x as isize, y as isize))
+                    Some(Point2::new(x as isize, y as isize))
                 } else {
                     None
                 }
