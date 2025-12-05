@@ -7,7 +7,7 @@ Solutions for [Advent of Code](https://adventofcode.com/) in [Rust](https://www.
 |   ❄️   |   🎁   |   ⛄   |   🎄   |
 | :----: | :----: | :----: | :----: |
 | 1 ⭐⭐ | 2 ⭐⭐ | 3 ⭐⭐ | 4 ⭐⭐ |
-| 5      | 6      | 7      | 8      |
+| 5 ⭐⭐ | 6      | 7      | 8      |
 | 9      | 10     | 11     | 12     |
 
 <!--- advent_readme_stars table --->
