@@ -3,8 +3,8 @@ use std::ops::{Add, AddAssign, Mul, MulAssign};
 
 #[derive(Debug, Default, PartialEq, Eq, PartialOrd, Ord, Hash, Copy, Clone)]
 pub struct Point2<T> {
-    x: T,
-    y: T,
+    pub x: T,
+    pub y: T,
 }
 
 impl<T> Point2<T> {
@@ -18,6 +18,14 @@ impl<T: Display> Display for Point2<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "({}, {})", self.x, self.y)
     }
+}
+
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Copy, Clone)]
+pub enum Heading {
+    North,
+    East,
+    South,
+    West
 }
 
 macro_rules! point2_impl {
@@ -39,6 +47,42 @@ macro_rules! point2_impl {
             }
 
             #[inline]
+            pub const fn step(self, heading: Heading) -> Self {
+                self.add(Self::unit(heading))
+            }
+
+            #[inline]
+            pub const fn unit(heading: Heading) -> Self {
+                match heading {
+                    Heading::North => Self::new(0, -1),
+                    Heading::East => Self::new(1, 0),
+                    Heading::South => Self::new(0, 1),
+                    Heading::West => Self::new(-1, 0),
+                }
+            }
+
+            #[inline]
+            pub const fn left(self) -> Self {
+                self.step(Heading::West)
+            }
+
+            #[inline]
+            pub const fn right(self) -> Self {
+                self.step(Heading::East)
+            }
+
+
+            #[inline]
+            pub const fn up(self) -> Self {
+                self.step(Heading::North)
+            }
+
+            #[inline]
+            pub const fn down(self) -> Self {
+                self.step(Heading::South)
+            }
+
+            #[inline]
             pub fn neighbors4(self) -> [Self; 4] {
                 Self::dirs4().map(|d| self + d)
             }
@@ -50,24 +94,30 @@ macro_rules! point2_impl {
 
             pub const fn dirs4() -> [Self; 4] {
                 [
-                    Self::new(-1, 0),
-                    Self::new(0, -1),
-                    Self::new(1, 0),
-                    Self::new(0, 1),
+                    Self::unit(Heading::North),
+                    Self::unit(Heading::East),
+                    Self::unit(Heading::South),
+                    Self::unit(Heading::West),
                 ]
             }
 
             pub const fn dirs8() -> [Self; 8] {
                 [
-                    Self::new(-1, -1),
-                    Self::new(-1, 0),
-                    Self::new(-1, 1),
-                    Self::new(0, -1),
-                    Self::new(0, 1),
-                    Self::new(1, -1),
-                    Self::new(1, 0),
-                    Self::new(1, 1),
+                    Self::unit(Heading::North),
+                    Self::unit(Heading::North).add(Self::unit(Heading::East)),
+                    Self::unit(Heading::East),
+                    Self::unit(Heading::East).add(Self::unit(Heading::South)),
+                    Self::unit(Heading::South),
+                    Self::unit(Heading::South).add(Self::unit(Heading::West)),
+                    Self::unit(Heading::West),
+                    Self::unit(Heading::West).add(Self::unit(Heading::North)),
                 ]
+            }
+        }
+
+        impl From<Heading> for Point2<$t> {
+            fn from(heading: Heading) -> Self {
+                Self::unit(heading)
             }
         }
 
