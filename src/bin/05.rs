@@ -15,7 +15,12 @@ pub fn part_one(input: &str) -> Option<u64> {
 pub fn part_two(input: &str) -> Option<u64> {
     let (mut ranges, _) = parse(input)?;
     merge_intervals(&mut ranges);
-    Some(ranges.into_iter().map(|(lo, hi)| 1 + hi - lo).sum::<usize>() as u64)
+    Some(
+        ranges
+            .into_iter()
+            .map(|(lo, hi)| 1 + hi - lo)
+            .sum::<usize>() as u64,
+    )
 }
 
 fn merge_intervals(ranges: &mut Vec<Interval>) {

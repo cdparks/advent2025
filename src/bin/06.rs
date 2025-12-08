@@ -83,7 +83,6 @@ impl std::str::FromStr for Op {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
