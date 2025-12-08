@@ -25,7 +25,7 @@ pub enum Heading {
     North,
     East,
     South,
-    West
+    West,
 }
 
 macro_rules! point2_impl {
@@ -44,6 +44,18 @@ macro_rules! point2_impl {
             #[inline]
             pub const fn scale(self, f: $t) -> Self {
                 Self::new(self.x * f, self.y * f)
+            }
+
+            #[inline]
+            pub const fn dist_squared(self, other: Self) -> $t {
+                let dx = self.x - other.x;
+                let dy = self.y - other.y;
+                dx * dx + dy * dy
+            }
+
+            #[inline]
+            pub fn dist(self, other: Self) -> f64 {
+                (self.dist_squared(other) as f64).sqrt()
             }
 
             #[inline]
@@ -70,7 +82,6 @@ macro_rules! point2_impl {
             pub const fn right(self) -> Self {
                 self.step(Heading::East)
             }
-
 
             #[inline]
             pub const fn up(self) -> Self {
@@ -158,3 +169,95 @@ point2_impl!(i16);
 point2_impl!(i32);
 point2_impl!(i64);
 point2_impl!(isize);
+
+#[derive(Debug, Default, PartialEq, Eq, PartialOrd, Ord, Hash, Copy, Clone)]
+pub struct Point3<T> {
+    pub x: T,
+    pub y: T,
+    pub z: T,
+}
+
+impl<T> Point3<T> {
+    #[inline]
+    pub const fn new(x: T, y: T, z: T) -> Self {
+        Self { x, y, z }
+    }
+}
+
+impl<T: Display> Display for Point3<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "({}, {}, {})", self.x, self.y, self.z)
+    }
+}
+
+macro_rules! point3_impl {
+    ($t:ty) => {
+        impl Point3<$t> {
+            #[inline]
+            pub const fn zero() -> Self {
+                Self::new(0, 0, 0)
+            }
+
+            #[inline]
+            pub const fn add(self, other: Self) -> Self {
+                Self::new(self.x + other.x, self.y + other.y, self.z + self.z)
+            }
+
+            #[inline]
+            pub const fn scale(self, f: $t) -> Self {
+                Self::new(self.x * f, self.y * f, self.z * f)
+            }
+
+            #[inline]
+            pub const fn dist_squared(self, other: Self) -> $t {
+                let dx = self.x - other.x;
+                let dy = self.y - other.y;
+                let dz = self.z - other.z;
+                dx * dx + dy * dy + dz * dz
+            }
+
+            #[inline]
+            pub fn dist(self, other: Self) -> f64 {
+                (self.dist_squared(other) as f64).sqrt()
+            }
+        }
+
+        impl Add for Point3<$t> {
+            type Output = Self;
+
+            fn add(self, other: Self) -> Self {
+                self.add(other)
+            }
+        }
+
+        impl AddAssign<Point3<$t>> for Point3<$t> {
+            fn add_assign(&mut self, other: Self) {
+                self.x += other.x;
+                self.y += other.y;
+                self.z += other.z;
+            }
+        }
+
+        impl Mul<$t> for Point3<$t> {
+            type Output = Self;
+
+            fn mul(self, other: $t) -> Self {
+                self.scale(other)
+            }
+        }
+
+        impl MulAssign<$t> for Point3<$t> {
+            fn mul_assign(&mut self, other: $t) {
+                self.x *= other;
+                self.y *= other;
+                self.z *= other;
+            }
+        }
+    };
+}
+
+point3_impl!(i8);
+point3_impl!(i16);
+point3_impl!(i32);
+point3_impl!(i64);
+point3_impl!(isize);
