@@ -21,6 +21,7 @@ test_lib = []
 ci = []
 
 [dependencies]
+log = "0.4.29"
 sscanf = "0.4.4"
 chrono = { version = "0.4.38", optional = true }
 dhat = { version = "0.3.3", optional = true }
@@ -29,8 +30,14 @@ tinyjson = "2.5.1"
 rayon = "1.11.0"
 disjoint = "0.8.0"
 itertools = "0.14.0"
-minilp = "0.2.2"
-good_lp = { version = "1.14.2", features = ["russcip", "scip", "scip_bundled"], default-features = false }
-russcip = { version = "0.9.1", features = ["bundled"] }
+
+# lpsolve builds fast, but it's really verbose by default
+# added a set_verbose() method, TODO: upstream
+[dependencies.good_lp]
+git = "https://github.com/cdparks/good_lp"
+rev = "722852136beadbae196bf19da9d40cbf153b3d63"
+version = "1.14.2"
+features = ["lpsolve"]
+default-features = false
 
 # Solution dependencies

@@ -1,4 +1,5 @@
 use good_lp::*;
+use good_lp::solvers::lpsolve::Verbosity;
 use itertools::Itertools;
 advent_of_code::solution!(10);
 
@@ -34,6 +35,7 @@ pub fn part_two(input: &str) -> Option<u64> {
                 let solution = vars
                     .minimise(presses.iter().sum::<Expression>())
                     .using(default_solver)
+                    .set_verbose(Verbosity::Important)
                     .with_all(joltage.iter().enumerate().map(|(i, jolt)| {
                         let sum = banks
                             .iter()
