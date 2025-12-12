@@ -4,30 +4,44 @@ advent_of_code::solution!(11);
 
 pub fn part_one(input: &str) -> Option<u64> {
     let graph = parse(input);
-    Some(count_paths(&graph, "you", true, true, "out") as u64)
+    Some(count_paths(&graph, "you", [], "out") as u64)
 }
 
 pub fn part_two(input: &str) -> Option<u64> {
     let graph = parse(input);
-    Some(count_paths(&graph, "svr", false, false, "out") as u64)
+    Some(count_paths(&graph, "svr", ["fft", "dac"], "out") as u64)
 }
 
-fn count_paths<'input>(graph: &Graph<'input>, src: &str, fft: bool, dac: bool, dst: &str) -> usize {
-    return dfs(&mut HashMap::new(), graph, src, fft, dac, dst);
+fn count_paths<'input, const N: usize>(
+    graph: &Graph<'input>,
+    src: &str,
+    waypoints: [&str; N],
+    dst: &str,
+) -> usize {
+    return dfs(
+        &mut HashMap::new(),
+        graph,
+        src,
+        waypoints.map(|w| (w, false)),
+        dst,
+    );
 
-    fn dfs<'node, 'input: 'node>(
-        memo: &mut Memo<'node>,
+    fn dfs<'node, 'input: 'node, 'waypoint, const N: usize>(
+        memo: &mut Memo<'node, 'waypoint, N>,
         graph: &Graph<'input>,
         node: &'node str,
-        fft: bool,
-        dac: bool,
+        waypoints: [(&'waypoint str, bool); N],
         dst: &str,
     ) -> usize {
         if node == dst {
-            return if fft && dac { 1 } else { 0 };
+            return if waypoints.iter().all(|(_, seen)| *seen) {
+                1
+            } else {
+                0
+            };
         }
 
-        let key = (node, fft, dac);
+        let key = (node, waypoints);
         if let Some(&count) = memo.get(&key) {
             return count;
         }
@@ -43,8 +57,7 @@ fn count_paths<'input>(graph: &Graph<'input>, src: &str, fft: bool, dac: bool, d
                     memo,
                     graph,
                     neighbor,
-                    fft || neighbor == &"fft",
-                    dac || neighbor == &"dac",
+                    waypoints.map(|(w, seen)| (w, seen || w == node)),
                     dst,
                 )
             })
@@ -65,7 +78,7 @@ fn parse(input: &str) -> Graph<'_> {
         .collect()
 }
 
-type Memo<'node> = HashMap<(&'node str, bool, bool), usize>;
+type Memo<'node, 'waypoint, const N: usize> = HashMap<(&'node str, [(&'waypoint str, bool); N]), usize>;
 type Graph<'input> = HashMap<&'input str, Vec<&'input str>>;
 
 #[cfg(test)]
